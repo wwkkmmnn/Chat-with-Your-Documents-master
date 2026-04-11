@@ -294,7 +294,7 @@ function Home() {
       );
     });
   }
-
+  {/*处理后端 SSE 流事件的函数，根据事件类型更新路由信息、工具调用状态、消息列表等，确保助手消息正确拼接和更新*/}
   function handleStreamEvent(event) {
     if (event.type === 'route') {
       setRouteInfo(event.data);

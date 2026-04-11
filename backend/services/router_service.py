@@ -68,6 +68,7 @@ class RouterService:
         wants_doc = any(keyword in normalized for keyword in self._doc_keywords)
         wants_hybrid = any(keyword in normalized for keyword in self._hybrid_keywords)
 
+        ## 优先级：mixed > direct > doc > web
         if wants_web and (wants_doc or (selected_files and wants_hybrid)):
             return self._decision("hybrid", "问题同时涉及上传文档和外部信息检索。")
 

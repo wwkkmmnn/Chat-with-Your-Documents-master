@@ -25,6 +25,7 @@ class WebSearchSkill(BaseSkill):
         if not query:
             return {"summary": "搜索词为空，未执行网页检索。", "results": []}
 
+        # 首先尝试使用 DuckDuckGo 的 Instant Answer API 获取快速结果，如果结果不足再爬取 HTML 搜索结果，最后返回一个包含摘要和结果列表的字典
         results = self._instant_answer_results(query)
         if len(results) < max_results:
             html_results = self._duckduckgo_html_results(query)
@@ -49,6 +50,7 @@ class WebSearchSkill(BaseSkill):
             "results": results,
         }
 
+    # 以下是一些辅助方法，用于处理 DuckDuckGo 的 Instant Answer API 和 HTML 搜索结果，提取有用的信息并清理文本，以便最终返回给调用方使用
     def _instant_answer_results(self, query: str) -> list[dict]:
         url = f"https://api.duckduckgo.com/?q={quote_plus(query)}&format=json&no_html=1&skip_disambig=1"
         payload = self._request_text(url)
@@ -81,6 +83,7 @@ class WebSearchSkill(BaseSkill):
 
         return results
 
+    # 从 DuckDuckGo 的 HTML 搜索结果中提取链接、标题和摘要，处理一些特殊的 URL 包装和 HTML 标签，确保返回干净的文本信息
     def _duckduckgo_html_results(self, query: str) -> list[dict]:
         url = f"https://html.duckduckgo.com/html/?q={quote_plus(query)}"
         html = self._request_text(url)

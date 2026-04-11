@@ -10,7 +10,7 @@ try:
 except ImportError:  # pragma: no cover - optional dependency
     docx = None
 
-
+# 根据文件路径的后缀名选择合适的解析方法，支持 PDF、TXT 和 DOCX 格式，返回一个 Document 对象列表，每个对象包含文本内容和元信息（如来源文件名和页码），供后续处理使用
 def parse_file(file_path: Path) -> list[Document]:
     suffix = file_path.suffix.lower()
     if suffix == ".pdf":

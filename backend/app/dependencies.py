@@ -34,7 +34,7 @@ def get_settings() -> AppSettings:
 @lru_cache
 def get_app_services() -> AppServices:
     settings = get_settings()
-
+    # 初始化各个服务组件，注入必要的依赖，构建一个包含所有服务实例的 AppServices 对象，并通过 lru_cache 确保全局唯一和性能优化
     rag_service = RagService(
         uploads_dir=settings.uploads_dir,
         parsed_dir=settings.parsed_dir,
@@ -53,6 +53,7 @@ def get_app_services() -> AppServices:
     router_service = RouterService()
     session_service = SessionService(settings.sessions_path)
 
+    # 创建技能注册表，注册各个技能实例，这些技能会被 ChatService 调用来执行具体的工具操作，如文档检索、网页搜索和内容总结
     skill_registry = SkillRegistry()
     skill_registry.register(DocSearchSkill(rag_service))
     skill_registry.register(WebSearchSkill())
